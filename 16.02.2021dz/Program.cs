@@ -7,6 +7,7 @@ namespace _16._02._2021dz
 {
     class Program
     {
+        //comment
         static List<int> width = new List<int>();
         static object locker = new object();
         protected static string[] symbols = { "A", "B", "C", "D", "F", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "F", "G", "H", "J", "K", "L", "C", "V", "B", "N", "M", "!", "#", "@", "$", "%", "^", "&", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "~" };
