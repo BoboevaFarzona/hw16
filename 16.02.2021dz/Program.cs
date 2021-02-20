@@ -1,0 +1,93 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace _16._02._2021dz
+{
+    class Program
+    {
+        static List<int> width = new List<int>();
+        static object locker = new object();
+        protected static string[] symbols = { "A", "B", "C", "D", "F", "E", "G", "H", "I", "J", "K", "L", "M", "N", "O", "F", "G", "H", "J", "K", "L", "C", "V", "B", "N", "M", "!", "#", "@", "$", "%", "^", "&", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "~" };
+        public static void WriteWithSomeColor(int second, int third, string color)
+        {
+            Console.ForegroundColor = (color == "white") ? ConsoleColor.White : (color == "green") ? ConsoleColor.Green : ConsoleColor.DarkGreen;
+            Console.SetCursorPosition(second, third);
+            Console.Write(symbols[new Random().Next(0, symbols.Length)]);
+        }
+        static Task[] tasks = new Task[50];
+        public static void ShowMatrix(int lengthes, int x, int a, int q)
+        {
+            x += q;
+            for (int i = lengthes; i > -1; i--)
+            {
+                WriteWithSomeColor(a, x, (i < lengthes && i != lengthes - 2 && i != lengthes - 1) ? "darkgreen" : (i == lengthes - 2) ? "green" : "white");
+
+                x--;
+            }
+            int p = Console.CursorTop;
+            while (p != 0)
+            {
+                Console.SetCursorPosition(a, p);
+                Console.Write(" ");
+                p--;
+            }
+        }
+        static void AddNumberToList()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                if (i % 2 == 0)
+                    width.Add(i);
+            }
+        }
+        static void AddNumberToArray(ref int[] array, int from, int untill)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = new Random().Next(from, untill);
+            }
+        }
+        static void Main(string[] args)
+        {
+            AddNumberToList();
+            int[] lengthesOfString = new int[50];
+            AddNumberToArray(ref lengthesOfString, 4, 11);
+            int[] stringPosFromTop = new int[50];
+            AddNumberToArray(ref stringPosFromTop, 11, 16);
+            List<int> lis = new List<int>();
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                lis.Add(i);
+            }
+            int x = 0;
+            while (x != 15)
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    int a = new Random().Next(0, lis.Count);
+                    tasks[i] = new Task(() => ShowMatrix(lengthesOfString[a], stringPosFromTop[a], width[a], x));
+                    tasks[i].Start();
+                    tasks[i].Wait();
+                    if (lis.Contains(a))
+                        lis.Remove(a);
+                    if (lis.Count == 0)
+                        for (int j = 0; j < tasks.Length; j++)
+                        {
+                            lis.Add(j);
+                        }
+                }
+                Thread.Sleep(100);
+                x++;
+                if (x == 15)
+                {
+                    Console.Clear();
+                    x = 0;
+                }
+            }
+            Console.Read();
+        }
+    }
+}
+
